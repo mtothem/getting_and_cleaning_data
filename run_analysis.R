@@ -1,5 +1,6 @@
 location <- file.path("./data" , "UCI HAR Dataset")
 data_files<-list.files(location, recursive=TRUE)
+#PART 1
 #read files
 sub_test  <- read.table(file.path(location, "test" , "subject_test.txt"),header = FALSE)
 sub_train <- read.table(file.path(location, "train", "subject_train.txt"),header = FALSE)
@@ -19,10 +20,12 @@ names(dataFeatures)<-  features_names$V2
 #cbind
 cbind_data <- cbind(rbind_subj, rbind_acty)
 Data <- cbind(dataFeatures, cbind_data)
+#PART 2
 #find mean and std dev
  extract<- features_names$V2[grep("mean\\(\\)|std\\(\\)",  features_names$V2)]
 selectedNames<-c(as.character( extract), "subject", "activity" )
 Data<-subset(Data,select=selectedNames)
+#PARTS 3 and 4
 #descriptive names
 desc_labels <- read.table(file.path(location, "activity_labels.txt"),header = FALSE)
 names(Data)<-gsub("^t", "time", names(Data))
@@ -31,6 +34,7 @@ names(Data)<-gsub("Acc", "Accelerometer", names(Data))
 names(Data)<-gsub("Gyro", "Gyroscope", names(Data))
 names(Data)<-gsub("Mag", "Magnitude", names(Data))
 names(Data)<-gsub("BodyBody", "Body", names(Data))
+#PART 5
 library(dplyr);
 Data2<-aggregate(. ~subject + activity, Data, mean)
  Data2<- Data2[order( Data2$subject, Data2$activity),]
